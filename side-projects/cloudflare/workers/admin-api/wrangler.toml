@@ -1,0 +1,38 @@
+name = "contentapp-admin-api"
+main = "src/index.ts"
+compatibility_date = "2026-03-10"
+workers_dev = true
+
+[triggers]
+crons = ["0 * * * *", "15 7 * * 1"]
+
+[vars]
+# Required
+FIREBASE_PROJECT_ID = "makerpars-oaslananka-mobil"
+ADMOB_PUBLISHER_ID = "pub-3312485084079132"
+
+# Optional, comma-separated exact origins or wildcard patterns (e.g. https://*.pages.dev)
+# ALLOWED_ADMIN_ORIGINS = "https://admin.parsfilo.com,https://parsfilo-admin.pages.dev,http://localhost:5173"
+
+# Optional fallback allowlist, comma/space/semicolon-separated emails.
+# ADMIN_ALLOWED_EMAILS = "makerpars@gmail.com,oaslananka@gmail.com"
+
+# Optional AdMob report thresholds
+# AD_HEALTH_MIN_REQUESTS = "500"
+# AD_HEALTH_FILL_RATE_THRESHOLD = "55"
+# AD_HEALTH_SHOW_RATE_THRESHOLD = "20"
+
+# Required secret:
+# FIREBASE_WEB_API_KEY
+#   npx wrangler secret put FIREBASE_WEB_API_KEY
+#
+# Optional secret (needed for Firestore /admins uid lookup and auto-upsert):
+# FIREBASE_SERVICE_ACCOUNT_JSON
+#   npx wrangler secret put FIREBASE_SERVICE_ACCOUNT_JSON
+#
+# Optional secrets (needed for /adPerformance refresh and weekly cron report):
+#   npx wrangler secret put ADMOB_CLIENT_ID
+#   npx wrangler secret put ADMOB_CLIENT_SECRET
+#   npx wrangler secret put ADMOB_REFRESH_TOKEN
+# Optional var:
+# ADMOB_PUBLISHER_ID = "pub-xxxxxxxxxxxxxxxx"

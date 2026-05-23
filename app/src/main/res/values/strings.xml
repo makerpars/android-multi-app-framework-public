@@ -1,0 +1,72 @@
+<resources>
+
+
+    <!-- Bottom Navigation -->
+    <string name="nav_home">Ana Sayfa</string>
+    <string name="nav_premium">Abonelik</string>
+    <string name="nav_apps">Uygulamalar</string>
+    <string name="nav_messages">Mesajlar</string>
+    <string name="nav_alerts">Bildirimler</string>
+
+    <!-- Content -->
+    <string name="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</string>
+    <string name="loading">Yükleniyor…</string>
+    <string name="error_generic">Bir hata oluştu</string>
+    <string name="error_network">İnternet bağlantısı yok</string>
+    <string name="error_retry">Tekrar dene</string>
+
+    <!-- Sharing -->
+    <string name="share_app_message">📖 %1$s uygulamasını kullanıyorum, çok beğendim!\n\nSen de indir: %2$s</string>
+    <string name="share_chooser_title">Uygulamayı Paylaş</string>
+    <string name="whatsapp_not_installed">WhatsApp yüklü değil</string>
+
+    <!-- Audio -->
+    <string name="audio_loading">Ses yükleniyor…</string>
+    <string name="audio_play">Oynat</string>
+    <string name="audio_pause">Duraklat</string>
+    <string name="audio_error">Ses yüklenemedi</string>
+
+    <!-- Display Modes -->
+    <string name="display_mode_arabic">Arapça</string>
+    <string name="display_mode_turkish">Türkçe</string>
+    <string name="display_mode_latin">Latin</string>
+
+    <!-- Settings -->
+    <string name="settings_dark_mode">Karanlık Mod</string>
+    <string name="settings_font_size">Yazı Boyutu</string>
+
+    <!-- Auth -->
+    <string name="sign_in_google">Google ile Giriş Yap</string>
+    <string name="sign_in_description">Mesaj göndermek ve yanıtları görmek için Google hesabınızla giriş yapın.</string>
+    <string name="sign_in_failed">Giriş başarısız oldu. Lütfen tekrar deneyin.</string>
+
+    <!-- Messages -->
+    <string name="messages_title">Mesajlar</string>
+    <string name="messages_empty">Henüz mesajınız yok</string>
+    <string name="messages_empty_hint">Sağ alttaki butona tıklayarak mesaj gönderebilirsiniz.</string>
+    <string name="messages_send">Mesaj Gönder</string>
+    <string name="messages_subject">Konu</string>
+    <string name="messages_body">Mesajınız</string>
+    <string name="messages_has_reply">Yanıt var</string>
+    <string name="send">Gönder</string>
+    <string name="cancel">İptal</string>
+
+    <!-- Notifications -->
+    <string name="notifications_title">Bildirimler</string>
+    <string name="notifications_empty">Henüz bildiriminiz yok</string>
+    <string name="notifications_empty_hint">Yeni bildirimler burada görünecektir.</string>
+
+    <!-- Subscription / Billing -->
+    <string name="subscription_title">Abonelik</string>
+    <string name="subscription_description">Reklamsız deneyim için bir plan seçin.</string>
+    <string name="subscription_coming_soon">Yakında aktif olacak</string>
+    <string name="billing_unavailable">Satın alma hizmeti kullanılamıyor</string>
+
+    <!-- Rewards -->
+    <string name="rewards_title">Ödüllü Reklam</string>
+    <string name="rewards_description">Reklam izleyerek geçici olarak reklamsız kullanım kazanın.</string>
+
+    <!-- Detail Screens -->
+    <string name="message_detail_title">Mesaj Detayı</string>
+    <string name="notification_detail_title">Bildirim Detayı</string>
+</resources>

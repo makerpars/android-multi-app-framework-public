@@ -1,0 +1,29 @@
+name: Validate Google Sign-In Config
+
+description: Validate Google Sign-In configuration for one or more flavors using FIREBASE_WEB_CLIENT_ID from environment.
+
+inputs:
+  flavors:
+    description: Comma-separated flavors or all
+    required: true
+  require_web_client_id:
+    description: Require FIREBASE_WEB_CLIENT_ID to be present and matched
+    required: false
+    default: 'false'
+
+runs:
+  using: composite
+  steps:
+    - name: Validate Google Sign-In Config
+      shell: bash
+      env:
+        FLAVORS: ${{ inputs.flavors }}
+        REQUIRE_WEB_CLIENT_ID: ${{ inputs.require_web_client_id }}
+        WEB_CLIENT_ID: ${{ env.FIREBASE_WEB_CLIENT_ID }}
+      run: |
+        set -euo pipefail
+        args=(--flavors "$FLAVORS")
+        if [ "$REQUIRE_WEB_CLIENT_ID" = 'true' ]; then
+          args+=(--require-web-client-id)
+        fi
+        python3 ./scripts/ci/verify_google_signin_config.py "${args[@]}"

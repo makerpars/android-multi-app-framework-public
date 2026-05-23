@@ -1,0 +1,36 @@
+parameters:
+  androidApiLevel: 36
+
+steps:
+  - task: Cache@2
+    displayName: Cache Gradle User Home
+    inputs:
+      key: 'gradle | "$(Agent.OS)" | gradle/wrapper/gradle-wrapper.properties | gradle/libs.versions.toml | build.gradle.kts | settings.gradle.kts'
+      restoreKeys: |
+        gradle | "$(Agent.OS)"
+      path: $(GRADLE_USER_HOME)
+
+  - task: Cache@2
+    displayName: Cache Android SDK
+    inputs:
+      key: 'androidsdk | "$(Agent.OS)" | api-${{ parameters.androidApiLevel }}'
+      restoreKeys: |
+        androidsdk | "$(Agent.OS)"
+      path: $(ANDROID_SDK_ROOT)
+
+  - bash: |
+      set -euo pipefail
+      java -version
+      chmod +x ./gradlew
+      if [ -f ./scripts/build-all-flavours.sh ]; then chmod +x ./scripts/build-all-flavours.sh; fi
+      if [ -f ./scripts/ci/setup-android-sdk.sh ]; then chmod +x ./scripts/ci/setup-android-sdk.sh; fi
+    displayName: Verify Java & Gradle Wrapper
+
+  - bash: |
+      set -euo pipefail
+      ./scripts/ci/setup-android-sdk.sh
+    displayName: Setup Android SDK (Hosted Agent)
+    env:
+      ANDROID_SDK_ROOT: $(ANDROID_SDK_ROOT)
+      ANDROID_API_LEVEL: ${{ parameters.androidApiLevel }}
+

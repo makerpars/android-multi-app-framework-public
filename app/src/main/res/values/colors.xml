@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Legacy system colors — kullanımdan kaldırılacak, geçiş için tutuluyor -->
+    <color name="black">#FF0A0A0F</color>
+    <color name="white">#FFFAF9F6</color>
+
+    <!-- Premium neutrals -->
+    <color name="premium_dark_bg">#FF080A0F</color>
+    <color name="premium_surface">#FF0E1018</color>
+    <color name="premium_gold">#FFBF9B3A</color>
+    <color name="premium_cream">#FFFFF8E8</color>
+</resources>

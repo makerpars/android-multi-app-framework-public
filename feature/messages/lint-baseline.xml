@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 9.0.1" type="baseline" client="gradle" dependencies="false" name="AGP (9.0.1)" variant="all" version="9.0.1">
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `Mesaj Gönder`, used in `messages_empty_cta` and `messages_send`"
+        errorLine1="    &lt;string name=&quot;messages_send&quot;>Mesaj Gönder&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="3"
+            column="5"/>
+        <location
+            file="src/main/res/values/strings.xml"
+            line="6"
+            column="5"
+            message="Duplicates value in `messages_send`"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `Nachricht senden`, used in `messages_empty_cta` and `messages_send`"
+        errorLine1="    &lt;string name=&quot;messages_send&quot;>Nachricht senden&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-de/strings.xml"
+            line="3"
+            column="5"/>
+        <location
+            file="src/main/res/values-de/strings.xml"
+            line="6"
+            column="5"
+            message="Duplicates value in `messages_send`"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `Send Message`, used in `messages_empty_cta` and `messages_send`"
+        errorLine1="    &lt;string name=&quot;messages_send&quot;>Send Message&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-en/strings.xml"
+            line="3"
+            column="5"/>
+        <location
+            file="src/main/res/values-en/strings.xml"
+            line="6"
+            column="5"
+            message="Duplicates value in `messages_send`"/>
+    </issue>
+
+</issues>

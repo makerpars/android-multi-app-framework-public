@@ -1,0 +1,32 @@
+name: Jules - Monthly AdMob Compliance
+
+on:
+  schedule:
+    - cron: '0 4 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  jules-monthly-admob-compliance:
+    if: ${{ github.repository_owner == 'MakerPars' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: google-labs-code/jules-invoke@v1
+        with:
+          jules_api_key: ${{ secrets.JULES_API_KEY }}
+          starting_branch: main
+          include_commit_log: true
+          prompt: |
+            Follow .github/jules/prompts/monthly-admob-compliance.md.
+            Audit UMP, consent sync, privacy options, app-ads.txt, ad revenue logging, and Remote Config policy.
+            Change only code-verifiable issues; leave AdMob/Play Console checks as documentation checklist items.
+            Do not increase ad frequency aggressively or bypass consent gates.

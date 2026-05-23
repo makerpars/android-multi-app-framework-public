@@ -1,0 +1,10 @@
+<resources>
+    <string name="notifications_title">Benachrichtigungen</string>
+    <string name="notifications_empty">Noch keine Benachrichtigungen</string>
+    <string name="notifications_empty_hint">Neue Benachrichtigungen werden hier angezeigt.</string>
+    <string name="notifications_permission_disabled_title">Benachrichtigungsberechtigung deaktiviert</string>
+    <string name="notifications_permission_disabled_hint">Aktiviere die Benachrichtigungsberechtigung, um neue Benachrichtigungen zu sehen.</string>
+    <string name="notifications_empty_cta">Benachrichtigungseinstellungen öffnen</string>
+    <string name="notifications_error">Fehler: %s</string>
+</resources>
+

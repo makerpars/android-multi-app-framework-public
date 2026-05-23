@@ -1,0 +1,29 @@
+{
+    "name": "contentapp-notifications",
+    "description": "Timezone-aware notification system for ContentApp",
+    "scripts": {
+        "build": "tsc",
+        "build:watch": "tsc --watch",
+        "verify-env": "node scripts/verify-functions-env.mjs",
+        "test:reset-logic": "npm run build && node scripts/test-reset-logic.js",
+        "serve": "npm run build && firebase emulators:start --only functions --config ../firebase.json",
+        "shell": "npm run build && firebase functions:shell --config ../firebase.json",
+        "start": "npm run shell",
+        "deploy": "firebase deploy --only functions --project makerpars-oaslananka-mobil --config ../firebase.json",
+        "logs": "firebase functions:log"
+    },
+    "engines": {
+        "node": "22"
+    },
+    "main": "lib/index.js",
+    "dependencies": {
+        "firebase-admin": "^13.7.0",
+        "firebase-functions": "^7.0.5",
+        "googleapis": "^150.0.1"
+    },
+    "devDependencies": {
+        "typescript": "^5.7.0",
+        "firebase-functions-test": "^3.4.0"
+    },
+    "private": true
+}

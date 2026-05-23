@@ -1,0 +1,5 @@
+# Functions build output
+lib/
+
+# Dependencies
+node_modules/

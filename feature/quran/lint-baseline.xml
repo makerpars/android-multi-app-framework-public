@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 9.0.1" type="baseline" client="gradle" dependencies="false" name="AGP (9.0.1)" variant="all" version="9.0.1">
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;ayet&quot;): This should probably be a plural rather than a string"
+        errorLine1="    &lt;string name=&quot;quran_verses_count&quot;>%d ayet&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="7"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;verses&quot;): This should probably be a plural rather than a string"
+        errorLine1="    &lt;string name=&quot;quran_verses_count&quot;>%d verses&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-en/strings.xml"
+            line="7"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="SyntheticAccessor"
+        message="Access to `private` method `toModel` of class `QuranRepositoryKt` requires synthetic accessor"
+        errorLine1="        quranDao.observeAllSuras().map { entities -> entities.map { it.toModel() } }"
+        errorLine2="                                                                    ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/parsfilo/contentapp/feature/quran/data/QuranRepository.kt"
+            line="43"
+            column="69"/>
+    </issue>
+
+    <issue
+        id="SyntheticAccessor"
+        message="Access to `private` method `toModel` of class `QuranRepositoryKt` requires synthetic accessor"
+        errorLine1="        quranDao.observeSura(suraNumber).map { entity -> entity?.toModel() }"
+        errorLine2="                                                         ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/parsfilo/contentapp/feature/quran/data/QuranRepository.kt"
+            line="46"
+            column="58"/>
+    </issue>
+
+    <issue
+        id="SyntheticAccessor"
+        message="Access to `private` method `toModel` of class `QuranRepositoryKt` requires synthetic accessor"
+        errorLine1="        quranDao.observeAyahsForSura(suraNumber).map { entities -> entities.map { it.toModel() } }"
+        errorLine2="                                                                                  ~~~~~~~~~~">
+        <location
+            file="src/main/java/com/parsfilo/contentapp/feature/quran/data/QuranRepository.kt"
+            line="49"
+            column="83"/>
+    </issue>
+
+    <issue
+        id="SyntheticAccessor"
+        message="Access to `private` method `toRevelationTypeName` of class `QuranRepositoryKt` requires synthetic accessor"
+        errorLine1="                            revelationType = chapter.optString(&quot;revelation&quot;).toRevelationTypeName(),"
+        errorLine2="                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/parsfilo/contentapp/feature/quran/data/QuranRepository.kt"
+            line="70"
+            column="46"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `Bookmarks`, used in `quran_bookmarks_title` and `quran_open_bookmarks`"
+        errorLine1="    &lt;string name=&quot;quran_bookmarks_title&quot;>Bookmarks&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-en/strings.xml"
+            line="4"
+            column="5"/>
+        <location
+            file="src/main/res/values-en/strings.xml"
+            line="28"
+            column="5"
+            message="Duplicates value in `quran_bookmarks_title`"/>
+    </issue>
+
+    <issue
+        id="DuplicateStrings"
+        message="Duplicate string value `Lesezeichen`, used in `quran_bookmarks_title` and `quran_open_bookmarks`"
+        errorLine1="    &lt;string name=&quot;quran_bookmarks_title&quot;>Lesezeichen&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-de/strings.xml"
+            line="4"
+            column="5"/>
+        <location
+            file="src/main/res/values-de/strings.xml"
+            line="28"
+            column="5"
+            message="Duplicates value in `quran_bookmarks_title`"/>
+    </issue>
+
+</issues>
