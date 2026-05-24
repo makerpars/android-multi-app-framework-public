@@ -16,6 +16,7 @@ plugins {
     // ── Quality Tools ──
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.kover)
 
 }
 
@@ -240,6 +241,52 @@ subprojects {
 }
 
 // qualityCheck task is registered near the top so subproject hooks can safely depend on it.
+
+// ═══════════════════════════════════════════════════════════════
+// ▸ 3b. Kover — Unit test coverage aggregation
+//    Run: ./gradlew koverXmlReport   (CI)
+//    Run: ./gradlew koverHtmlReport  (local preview in build/reports/kover/html)
+// ═══════════════════════════════════════════════════════════════
+
+subprojects {
+    apply(plugin = "org.jetbrains.kotlinx.kover")
+}
+
+kover {
+    merge {
+        subprojects()
+    }
+    reports {
+        filters {
+            excludes {
+                annotatedBy("Generated", "Composable")
+                packages(
+                    "*.BuildConfig",
+                    "hilt_aggregated_deps.*",
+                    "*.di",
+                    "*.di.*",
+                )
+                // Exclude generated Room DAO implementations
+                classes("*_Impl", "*_Impl\$*")
+            }
+        }
+        total {
+            html {
+                htmlDir.set(layout.buildDirectory.dir("reports/kover/html"))
+            }
+            xml {
+                xmlFile.set(layout.buildDirectory.file("reports/kover/xml/coverage.xml"))
+            }
+        }
+        verify {
+            rule("Minimum line coverage") {
+                bound {
+                    minValue = 10
+                }
+            }
+        }
+    }
+}
 
 // ═══════════════════════════════════════════════════════════════
 // ▸ 4. printFlavors — Utility for CI/CD to get flavor list
