@@ -2,6 +2,9 @@
 -keepattributes SourceFile,LineNumberTable,*Annotation*
 -renamesourcefileattribute SourceFile
 
+# Emit a usage report so CI can verify R8 is actually stripping dead code
+-printusage build/outputs/mapping/release/usage.txt
+
 # Known harmless missing annotation in some GMS artifacts
 -dontwarn com.google.android.gms.common.annotation.NoNullnessRewrite
 

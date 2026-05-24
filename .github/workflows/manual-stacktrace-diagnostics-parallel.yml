@@ -152,7 +152,7 @@ jobs:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
 
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v4
         with:
           accept-android-sdk-licenses: false
           log-accepted-android-sdk-licenses: false
@@ -213,7 +213,7 @@ jobs:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
 
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v4
         with:
           accept-android-sdk-licenses: false
           log-accepted-android-sdk-licenses: false
@@ -275,7 +275,7 @@ jobs:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
 
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v4
         with:
           accept-android-sdk-licenses: false
           log-accepted-android-sdk-licenses: false
@@ -338,7 +338,7 @@ jobs:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
 
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v4
         with:
           accept-android-sdk-licenses: false
           log-accepted-android-sdk-licenses: false
