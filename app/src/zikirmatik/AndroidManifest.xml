@@ -5,12 +5,18 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application>
+        <!-- Alarm receiver: explicit PendingIntent used in ZikirReminderScheduler, no export needed -->
         <receiver
             android:name="com.parsfilo.contentapp.feature.counter.alarm.ZikirReminderReceiver"
             android:enabled="true"
+            android:exported="false" />
+
+        <!-- System broadcast receiver: handles boot/time/package events for alarm rescheduling -->
+        <receiver
+            android:name="com.parsfilo.contentapp.feature.counter.alarm.ZikirSystemBroadcastReceiver"
+            android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.parsfilo.zikirmatik.ZIKIR_REMINDER" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.TIME_SET" />

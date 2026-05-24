@@ -2,6 +2,7 @@ package com.parsfilo.contentapp.feature.ads
 
 import android.app.Activity
 import android.content.Context
+import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.ads.initialization.InitializationStatus
@@ -619,6 +620,9 @@ class AdManager @Inject constructor(
             .setTagForChildDirectedTreatment(ageGateStatus.childDirectedTreatmentTag())
             .setTagForUnderAgeOfConsent(ageGateStatus.underAgeOfConsentTag())
             .setMaxAdContentRating(ageGateStatus.maxAdContentRating())
+        if (BuildConfig.DEBUG) {
+            builder.setTestDeviceIds(listOf(AdRequest.DEVICE_ID_EMULATOR))
+        }
         MobileAds.setRequestConfiguration(builder.build())
     }
 

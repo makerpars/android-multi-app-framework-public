@@ -33,22 +33,11 @@ class ZikirReminderReceiver : BroadcastReceiver() {
         val receiverScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
         receiverScope.launch {
             try {
-                when (action) {
-                    ZikirReminderScheduler.ACTION_ZIKIR_REMINDER -> {
-                        val todayTotal = zikirRepository.getTodayTotalCount().first()
-                        Timber.d("Zikir daily reminder fired todayTotal=%d", todayTotal)
-                        zikirReminderNotifier.showDailyReminder(todayTotalCount = todayTotal)
-                        zikirReminderScheduler.scheduleOrCancelFromPreferences()
-                    }
-
-                    Intent.ACTION_BOOT_COMPLETED,
-                    Intent.ACTION_MY_PACKAGE_REPLACED,
-                    Intent.ACTION_TIME_CHANGED,
-                    Intent.ACTION_TIMEZONE_CHANGED -> {
-                        Timber.d("Zikir schedule refresh requested by system action=%s", action)
-                        zikirReminderScheduler.scheduleOrCancelFromPreferences()
-                        zikirReminderScheduler.scheduleStreakCheckWorker()
-                    }
+                if (action == ZikirReminderScheduler.ACTION_ZIKIR_REMINDER) {
+                    val todayTotal = zikirRepository.getTodayTotalCount().first()
+                    Timber.d("Zikir daily reminder fired todayTotal=%d", todayTotal)
+                    zikirReminderNotifier.showDailyReminder(todayTotalCount = todayTotal)
+                    zikirReminderScheduler.scheduleOrCancelFromPreferences()
                 }
             } finally {
                 Timber.d("ZikirReminderReceiver finished action=%s", action)

@@ -8,6 +8,7 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.android.gms.ads.rewarded.ServerSideVerificationOptions
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -280,8 +281,12 @@ class RewardedAdManager @Inject constructor(
                     )
                 }
             }
+            loadedAd.setServerSideVerificationOptions(
+                ServerSideVerificationOptions.Builder()
+                    .setCustomData("placement=${currentPlacement.analyticsValue}&route=${currentRoute.orEmpty()}&adUnit=${loadedAd.adUnitId}")
+                    .build(),
+            )
             loadedAd.show(activity) { rewardItem ->
-                // Handle the reward.
                 Timber.d("Rewarded reward earned: %s x%d", rewardItem.type, rewardItem.amount)
                 onUserEarnedReward()
             }

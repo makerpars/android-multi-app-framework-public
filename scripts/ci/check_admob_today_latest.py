@@ -92,6 +92,22 @@ def parse_args() -> argparse.Namespace:
         help="Low match-rate threshold for issue detection (default: 0.50)",
     )
     parser.add_argument(
+        "--limited-ads-show-threshold",
+        type=float,
+        default=0.20,
+        help=(
+            "Show-rate floor for Limited Ads suspicion (default: 0.20). "
+            "Apps below this AND below --limited-ads-match-threshold are flagged. "
+            "Low show+match together is a proxy for consent/TCF issues causing limited ad serving."
+        ),
+    )
+    parser.add_argument(
+        "--limited-ads-match-threshold",
+        type=float,
+        default=0.40,
+        help="Match-rate floor for Limited Ads suspicion (default: 0.40).",
+    )
+    parser.add_argument(
         "--out-json",
         default="TEMP_OUT/admob_today_latest_report.json",
         help="Output JSON path (default: TEMP_OUT/admob_today_latest_report.json)",
@@ -509,6 +525,16 @@ def main() -> None:
         for a in apps_out
         if a["ad_requests"] >= args.min_requests and a["impressions"] == 0
     ]
+    # Both show_rate AND match_rate below their respective floors together is a strong
+    # proxy signal for Limited Ads caused by consent/TCF issues (IAB TCF error code 1.4:
+    # missing disclosedVendors segment). Check AdMob > Traffic Quality for TCF errors.
+    limited_ads_suspect = [
+        a
+        for a in apps_out
+        if a["ad_requests"] >= args.min_requests
+        and a["show_rate"] < args.limited_ads_show_threshold
+        and a["match_rate"] < args.limited_ads_match_threshold
+    ]
 
     result = {
         "account": account_name,
@@ -540,6 +566,7 @@ def main() -> None:
         },
         "low_performing_apps": low_performing,
         "zero_impressions_apps": zero_impressions,
+        "limited_ads_suspect_apps": limited_ads_suspect,
         "all_apps_count": len(apps_out),
     }
 
@@ -562,14 +589,26 @@ def main() -> None:
     print("totals_from_latest_rows:", json.dumps(result["totals_from_latest_rows"], ensure_ascii=False))
     print(
         f"top_apps={len(result['top_apps'])} "
-        f"low_performing={len(low_performing)} zero_impressions={len(zero_impressions)}"
+        f"low_performing={len(low_performing)} zero_impressions={len(zero_impressions)} "
+        f"limited_ads_suspect={len(limited_ads_suspect)}"
     )
+    if limited_ads_suspect:
+        print(
+            "WARNING limited_ads_suspect: {} app(s) have both low show_rate(<{}) and low match_rate(<{})."
+            " This may indicate Limited Ad Serving caused by consent/TCF issues."
+            " Check AdMob > Traffic Quality for IAB TCF error code 1.4 (missing disclosedVendors segment).".format(
+                len(limited_ads_suspect),
+                args.limited_ads_show_threshold,
+                args.limited_ads_match_threshold,
+            )
+        )
     print(f"wrote={out_path}")
 
-    if args.fail_on_alert and (low_performing or zero_impressions):
+    if args.fail_on_alert and (low_performing or zero_impressions or limited_ads_suspect):
         raise SystemExit(
             "AdMob latest-only health alerts detected "
-            f"(low_performing={len(low_performing)}, zero_impressions={len(zero_impressions)})"
+            f"(low_performing={len(low_performing)}, zero_impressions={len(zero_impressions)}, "
+            f"limited_ads_suspect={len(limited_ads_suspect)})"
         )
 
 

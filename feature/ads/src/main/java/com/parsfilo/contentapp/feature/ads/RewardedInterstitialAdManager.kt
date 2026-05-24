@@ -6,6 +6,7 @@ import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.rewarded.ServerSideVerificationOptions
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -339,6 +340,11 @@ class RewardedInterstitialAdManager @Inject constructor(
             }
         }
 
+        ad.setServerSideVerificationOptions(
+            ServerSideVerificationOptions.Builder()
+                .setCustomData("placement=${placement.analyticsValue}&route=${route.orEmpty()}&adUnit=${ad.adUnitId}")
+                .build(),
+        )
         ad.show(activity) { rewardItem ->
             Timber.d("Reward earned: %s x%d", rewardItem.type, rewardItem.amount)
             onUserEarnedReward(rewardItem.type, rewardItem.amount)
