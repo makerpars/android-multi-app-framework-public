@@ -112,15 +112,47 @@ async function verifySignature(
   }
 
   const publicKey = await importEcPublicKey(keyEntry.pem);
-  const sigBytes = base64UrlDecode(signatureBase64Url);
+  const sigDerBytes = base64UrlDecode(signatureBase64Url);
+  const sigRawBytes = derToRawSignature(sigDerBytes);
   const contentBytes = new TextEncoder().encode(signedContent);
 
   return crypto.subtle.verify(
     { name: 'ECDSA', hash: { name: 'SHA-256' } },
     publicKey,
-    sigBytes,
+    sigRawBytes,
     contentBytes,
   );
+}
+
+function derToRawSignature(derBuffer: ArrayBuffer): ArrayBuffer {
+  const der = new Uint8Array(derBuffer);
+  let offset = 0;
+  if (der[offset++] !== 0x30) throw new Error('Expected SEQUENCE');
+  
+  let len = der[offset++];
+  if (len & 0x80) offset += (len & 0x7f); // skip long length form
+  
+  if (der[offset++] !== 0x02) throw new Error('Expected INTEGER (r)');
+  let rLen = der[offset++];
+  let rOffset = offset;
+  offset += rLen;
+  
+  if (der[offset++] !== 0x02) throw new Error('Expected INTEGER (s)');
+  let sLen = der[offset++];
+  let sOffset = offset;
+  
+  let r = der.slice(rOffset, rOffset + rLen);
+  let s = der.slice(sOffset, sOffset + sLen);
+  
+  // Remove leading zeros
+  if (r.length > 32 && r[0] === 0x00) r = r.slice(1);
+  if (s.length > 32 && s[0] === 0x00) s = s.slice(1);
+  
+  // Pad to exactly 32 bytes each
+  const raw = new Uint8Array(64);
+  raw.set(r, 32 - r.length);
+  raw.set(s, 64 - s.length);
+  return raw.buffer;
 }
 
 async function importEcPublicKey(pem: string): Promise<CryptoKey> {
