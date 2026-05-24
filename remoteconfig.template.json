@@ -53,12 +53,22 @@
     },
     "ads_interstitial_aggressive_preload_packages_csv": {
       "defaultValue": {
-        "value": "com.parsfilo.namazsurelerivedualarsesli,com.parsfilo.mucizedualar"
+        "value": "com.parsfilo.namazsurelerivedualarsesli,com.parsfilo.ismiazamduasi,com.parsfilo.mucizedualar,com.parsfilo.ayetelkursi,com.parsfilo.yasinsuresi,com.parsfilo.kenzularsduasi,com.parsfilo.insirahsuresi"
       }
     },
     "ads_app_open_aggressive_preload_packages_csv": {
       "defaultValue": {
-        "value": "com.parsfilo.namazsurelerivedualarsesli,com.parsfilo.mucizedualar"
+        "value": "com.parsfilo.namazsurelerivedualarsesli,com.parsfilo.ismiazamduasi,com.parsfilo.mucizedualar,com.parsfilo.ayetelkursi,com.parsfilo.yasinsuresi,com.parsfilo.kenzularsduasi,com.parsfilo.insirahsuresi"
+      }
+    },
+    "ads_interstitial_pool_max": {
+      "defaultValue": {
+        "value": "2"
+      }
+    },
+    "ads_rewarded_pool_max": {
+      "defaultValue": {
+        "value": "2"
       }
     },
     "ads_reward_offer_routes_csv": {
@@ -128,7 +138,7 @@
     },
     "ads_native_banner_fallback_enabled": {
       "defaultValue": {
-        "value": "true"
+        "value": "false"
       }
     },
     "ads_native_banner_fallback_packages_csv": {

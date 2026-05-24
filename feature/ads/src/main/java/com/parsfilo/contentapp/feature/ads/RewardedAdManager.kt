@@ -24,7 +24,9 @@ class RewardedAdManager @Inject constructor(
     private val adsPolicyProvider: AdsPolicyProvider,
 ) {
     private var rewardedAd: RewardedAd? = null
+    private var rewardedAdNext: RewardedAd? = null
     private var isLoading = false
+    private var isLoadingNext = false
     private var currentAdUnitId: String = ""
     private var currentPlacement: AdPlacement = AdPlacement.REWARDED_DEFAULT
     private var currentRoute: String? = null
@@ -151,8 +153,58 @@ class RewardedAdManager @Inject constructor(
                     rewardedAd = ad
                     _isAdReady.value = true
                     isLoading = false
+                    loadNextIfNeeded()
                 }
             }
+        )
+    }
+
+    private fun loadNextIfNeeded() {
+        val adUnitId = currentAdUnitId.ifBlank { return }
+        if (!AdsConsentRuntimeState.canRequestAds.value) return
+        if (isLoadingNext || rewardedAdNext != null) return
+        if (adsPolicyProvider.getPolicy().rewardedPoolMax < 2) return
+
+        Timber.d(
+            "Rewarded loading next slot placement=%s adUnit=%s",
+            currentPlacement.analyticsValue,
+            adUnitId,
+        )
+        isLoadingNext = true
+        val adRequest = AdRequest.Builder().build()
+        RewardedAd.load(
+            context,
+            adUnitId,
+            adRequest,
+            object : RewardedAdLoadCallback() {
+                override fun onAdLoaded(ad: RewardedAd) {
+                    Timber.d("Rewarded next slot loaded adUnit=%s", ad.adUnitId)
+                    isLoadingNext = false
+                    ad.onPaidEventListener = { value ->
+                        adRevenueLogger.logPaidEvent(
+                            AdPaidEventContext(
+                                adUnitId = ad.adUnitId,
+                                adFormat = AdFormat.REWARDED,
+                                placement = currentPlacement,
+                                route = currentRoute,
+                                adValue = value,
+                                responseMeta = adRevenueLogger.extractResponseMeta(ad.responseInfo),
+                            ),
+                        )
+                    }
+                    rewardedAdNext = ad
+                }
+
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Timber.d(
+                        "Rewarded next slot failed code=%d placement=%s",
+                        adError.code,
+                        currentPlacement.analyticsValue,
+                    )
+                    isLoadingNext = false
+                    rewardedAdNext = null
+                }
+            },
         )
     }
 
@@ -197,8 +249,14 @@ class RewardedAdManager @Inject constructor(
         if (loadedAd != null) {
             loadedAd.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
-                    rewardedAd = null
-                    _isAdReady.value = false
+                    if (rewardedAdNext != null) {
+                        rewardedAd = rewardedAdNext
+                        rewardedAdNext = null
+                        loadNextIfNeeded()
+                    } else {
+                        rewardedAd = null
+                        _isAdReady.value = false
+                    }
                     isLoading = false
                     Timber.d("Rewarded dismissed")
                     adRevenueLogger.logDismissed(
@@ -217,8 +275,14 @@ class RewardedAdManager @Inject constructor(
                 }
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                    rewardedAd = null
-                    _isAdReady.value = false
+                    if (rewardedAdNext != null) {
+                        rewardedAd = rewardedAdNext
+                        rewardedAdNext = null
+                        loadNextIfNeeded()
+                    } else {
+                        rewardedAd = null
+                        _isAdReady.value = false
+                    }
                     isLoading = false
                     Timber.w("Rewarded failed to show: %s", adError.message)
                     adRevenueLogger.logFailedToShow(
@@ -326,7 +390,9 @@ class RewardedAdManager @Inject constructor(
             isLoading,
         )
         rewardedAd = null
+        rewardedAdNext = null
         _isAdReady.value = false
         isLoading = false
+        isLoadingNext = false
     }
 }

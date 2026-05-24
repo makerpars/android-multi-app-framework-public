@@ -35,6 +35,8 @@ data class AdsPolicyConfig(
     val nativeBannerFallbackPackages: Set<String> = emptySet(),
     val reportFreshnessMaxHours: Int = 24,
     val consentRetryBackoffMinutes: Int = 30,
+    val interstitialPoolMax: Int = 2,
+    val rewardedPoolMax: Int = 2,
     val nativePoolMax: Int,
     val nativeTtlMs: Long,
     val nativeExactPlacementOnly: Boolean,

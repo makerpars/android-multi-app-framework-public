@@ -109,6 +109,24 @@ class AdsPolicyProvider @Inject constructor(
         val nativeBannerFallbackEnabled =
             remoteConfigManager.getBooleanOrNull(KEY_NATIVE_BANNER_FALLBACK_ENABLED)
                 ?: DEFAULT_NATIVE_BANNER_FALLBACK_ENABLED
+        val interstitialPoolMax = sanitizeInt(
+            (
+                remoteConfigManager.getLongOrNull(KEY_INTERSTITIAL_POOL_MAX)
+                    ?: DEFAULT_INTERSTITIAL_POOL_MAX.toLong()
+            ).toInt(),
+            min = 1,
+            max = 3,
+            fallback = DEFAULT_INTERSTITIAL_POOL_MAX,
+        )
+        val rewardedPoolMax = sanitizeInt(
+            (
+                remoteConfigManager.getLongOrNull(KEY_REWARDED_POOL_MAX)
+                    ?: DEFAULT_REWARDED_POOL_MAX.toLong()
+            ).toInt(),
+            min = 1,
+            max = 3,
+            fallback = DEFAULT_REWARDED_POOL_MAX,
+        )
         val nativePoolMax = sanitizeInt(
             (
                 remoteConfigManager.getLongOrNull(KEY_NATIVE_POOL_MAX)
@@ -233,6 +251,8 @@ class AdsPolicyProvider @Inject constructor(
             nativeBannerFallbackPackages = nativeBannerFallbackPackages,
             reportFreshnessMaxHours = reportFreshnessMaxHours,
             consentRetryBackoffMinutes = consentRetryBackoffMinutes,
+            interstitialPoolMax = interstitialPoolMax,
+            rewardedPoolMax = rewardedPoolMax,
             nativePoolMax = nativePoolMax,
             nativeTtlMs = nativeTtlMs,
             nativeExactPlacementOnly = nativeExactPlacementOnly,
@@ -321,6 +341,8 @@ class AdsPolicyProvider @Inject constructor(
             "ads_rewarded_interstitial_max_per_session"
         const val KEY_REWARDED_INTERSTITIAL_INTRO_REQUIRED =
             "ads_rewarded_interstitial_intro_required"
+        const val KEY_INTERSTITIAL_POOL_MAX = "ads_interstitial_pool_max"
+        const val KEY_REWARDED_POOL_MAX = "ads_rewarded_pool_max"
         const val KEY_NATIVE_POOL_MAX = "ads_native_pool_max"
         const val KEY_NATIVE_TTL_MS = "ads_native_ttl_ms"
         const val KEY_NATIVE_EXACT_PLACEMENT_ONLY = "ads_native_exact_placement_only"
@@ -364,10 +386,12 @@ class AdsPolicyProvider @Inject constructor(
         const val DEFAULT_REWARDED_INTERSTITIAL_MIN_INTERVAL_MS = 900_000L
         const val DEFAULT_REWARDED_INTERSTITIAL_MAX_PER_SESSION = 2
         const val DEFAULT_REWARDED_INTERSTITIAL_INTRO_REQUIRED = true
+        const val DEFAULT_INTERSTITIAL_POOL_MAX = 2
+        const val DEFAULT_REWARDED_POOL_MAX = 2
         const val DEFAULT_NATIVE_POOL_MAX = 2
         const val DEFAULT_NATIVE_TTL_MS = 1_800_000L
         const val DEFAULT_NATIVE_EXACT_PLACEMENT_ONLY = false
-        const val DEFAULT_NATIVE_BANNER_FALLBACK_ENABLED = true
+        const val DEFAULT_NATIVE_BANNER_FALLBACK_ENABLED = false
         const val DEFAULT_NATIVE_BANNER_FALLBACK_PACKAGES =
             "com.parsfilo.namazsurelerivedualarsesli,com.parsfilo.mucizedualar,com.parsfilo.yasinsuresi"
         const val DEFAULT_REPORT_FRESHNESS_MAX_HOURS = 24
@@ -402,6 +426,8 @@ class AdsPolicyProvider @Inject constructor(
             KEY_REWARDED_MAX_PER_SESSION to DEFAULT_REWARDED_MAX_PER_SESSION.toLong(),
             KEY_REWARDED_INTERSTITIAL_MAX_PER_SESSION to DEFAULT_REWARDED_INTERSTITIAL_MAX_PER_SESSION.toLong(),
             KEY_REWARDED_INTERSTITIAL_INTRO_REQUIRED to DEFAULT_REWARDED_INTERSTITIAL_INTRO_REQUIRED,
+            KEY_INTERSTITIAL_POOL_MAX to DEFAULT_INTERSTITIAL_POOL_MAX.toLong(),
+            KEY_REWARDED_POOL_MAX to DEFAULT_REWARDED_POOL_MAX.toLong(),
             KEY_NATIVE_POOL_MAX to DEFAULT_NATIVE_POOL_MAX.toLong(),
             KEY_NATIVE_TTL_MS to DEFAULT_NATIVE_TTL_MS,
             KEY_NATIVE_EXACT_PLACEMENT_ONLY to DEFAULT_NATIVE_EXACT_PLACEMENT_ONLY,

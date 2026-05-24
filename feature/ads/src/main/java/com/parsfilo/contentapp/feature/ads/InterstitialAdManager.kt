@@ -27,7 +27,9 @@ class InterstitialAdManager @Inject constructor(
     private val adsPolicyProvider: AdsPolicyProvider,
 ) {
     private var interstitialAd: InterstitialAd? = null
+    private var interstitialAdNext: InterstitialAd? = null
     private var isLoading = false
+    private var isLoadingNext = false
     private var currentAdUnitId: String? = null
     private var currentPlacement: AdPlacement = AdPlacement.INTERSTITIAL_DEFAULT
     private var currentRoute: String? = null
@@ -181,6 +183,7 @@ class InterstitialAdManager @Inject constructor(
                         )
                     }
                     interstitialAd = ad
+                    loadNextIfNeeded()
                 }
             },
         )
@@ -361,9 +364,15 @@ class InterstitialAdManager @Inject constructor(
                     route = route,
                     trigger = triggerKind.analyticsValue,
                 )
-                interstitialAd = null
+                if (interstitialAdNext != null) {
+                    interstitialAd = interstitialAdNext
+                    interstitialAdNext = null
+                    loadNextIfNeeded()
+                } else {
+                    interstitialAd = null
+                    maybeReload(reason = "post_show")
+                }
                 onAdDismissed()
-                maybeReload(reason = "post_show")
             }
 
             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
@@ -385,9 +394,15 @@ class InterstitialAdManager @Inject constructor(
                     errorCode = adError.code,
                     errorMessage = adError.message,
                 )
-                interstitialAd = null
+                if (interstitialAdNext != null) {
+                    interstitialAd = interstitialAdNext
+                    interstitialAdNext = null
+                    loadNextIfNeeded()
+                } else {
+                    interstitialAd = null
+                    maybeReload(reason = "show_failed")
+                }
                 onAdDismissed()
-                maybeReload(reason = "show_failed")
             }
 
             override fun onAdShowedFullScreenContent() {
@@ -438,6 +453,55 @@ class InterstitialAdManager @Inject constructor(
         ad.show(activity)
     }
 
+    private fun loadNextIfNeeded() {
+        val adUnitId = currentAdUnitId ?: return
+        if (!AdsConsentRuntimeState.canRequestAds.value) return
+        if (isLoadingNext || interstitialAdNext != null) return
+        if (adsPolicyProvider.getPolicy().interstitialPoolMax < 2) return
+
+        Timber.d(
+            "Interstitial loading next slot placement=%s adUnit=%s",
+            currentPlacement.analyticsValue,
+            adUnitId,
+        )
+        isLoadingNext = true
+        val adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(
+            currentLoadContext ?: appContext,
+            adUnitId,
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    Timber.d("Interstitial next slot loaded adUnit=%s", ad.adUnitId)
+                    isLoadingNext = false
+                    ad.onPaidEventListener = { adValue ->
+                        adRevenueLogger.logPaidEvent(
+                            AdPaidEventContext(
+                                adUnitId = ad.adUnitId,
+                                adFormat = AdFormat.INTERSTITIAL,
+                                placement = currentPlacement,
+                                route = currentRoute,
+                                adValue = adValue,
+                                responseMeta = adRevenueLogger.extractResponseMeta(ad.responseInfo),
+                            ),
+                        )
+                    }
+                    interstitialAdNext = ad
+                }
+
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Timber.d(
+                        "Interstitial next slot failed code=%d placement=%s",
+                        adError.code,
+                        currentPlacement.analyticsValue,
+                    )
+                    isLoadingNext = false
+                    interstitialAdNext = null
+                }
+            },
+        )
+    }
+
     private fun maybeReload(reason: String) {
         val adUnitId = currentAdUnitId ?: return
         if (interstitialAd == null && AdsConsentRuntimeState.canRequestAds.value) {
@@ -477,6 +541,8 @@ class InterstitialAdManager @Inject constructor(
             isLoading,
         )
         interstitialAd = null
+        interstitialAdNext = null
         isLoading = false
+        isLoadingNext = false
     }
 }
