@@ -16,10 +16,11 @@ fun NativeFeedAdSlot(
     bannerAdUnitId: String,
     bannerPlacement: AdPlacement,
     route: String? = null,
+    useSmallFormat: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
     if (nativeAd != null) {
-        NativeAdItem(nativeAd = nativeAd, modifier = modifier)
+        NativeAdItem(nativeAd = nativeAd, isSmallFormat = useSmallFormat, modifier = modifier)
         return
     }
 

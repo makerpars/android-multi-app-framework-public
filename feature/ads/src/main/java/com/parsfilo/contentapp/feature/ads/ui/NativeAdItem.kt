@@ -43,17 +43,19 @@ private val NATIVE_MEDIA_HEIGHT = 110.dp // Tightened media height
 fun NativeAdItem(
     nativeAd: NativeAd,
     modifier: Modifier = Modifier,
+    isSmallFormat: Boolean = false,
 ) {
     val dimens = LocalDimens.current
     val colorScheme = MaterialTheme.colorScheme
 
     // Flavor temasından gelen renkler
     // Make ad background distinctly different from ordinary surface elements
+    // Using a more solid and distinct color combination to avoid "Ads looking like content" policy violation.
     val cardBg = colorScheme.surfaceVariant
     val accentColor = colorScheme.secondary
     val textPrimary = colorScheme.onSurfaceVariant
     val textSecondary = colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
-    val borderColor = colorScheme.outline
+    val borderColor = colorScheme.outlineVariant // Make border more distinct
     val ctaBg = colorScheme.primary
     val ctaText = colorScheme.onPrimary
 
@@ -77,20 +79,23 @@ fun NativeAdItem(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = NATIVE_MEDIUM_MIN_HEIGHT)
+                    .heightIn(min = if (isSmallFormat) 0.dp else NATIVE_MEDIUM_MIN_HEIGHT)
                     .clip(RoundedCornerShape(dimens.radiusLarge))
                     .background(cardBg, RoundedCornerShape(dimens.radiusLarge))
                     .border(2.dp, borderColor, RoundedCornerShape(dimens.radiusLarge)), // Thicker border for clarity
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = dimens.space12, vertical = dimens.space8),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(colorScheme.surfaceVariant.copy(alpha = 0.5f)) // Make header distinct
+                        .padding(horizontal = dimens.space12, vertical = dimens.space8),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     NativeAdAttribution(
                         text = "Reklam / Ad", // Explicit attribution
-                        containerColor = colorScheme.tertiary, // Very prominent color
-                        contentColor = colorScheme.onTertiary,
+                        containerColor = colorScheme.secondary, // Very prominent color
+                        contentColor = colorScheme.onSecondary,
                     )
                     NativeAdChoicesView(modifier = Modifier.size(dimens.iconMd))
                 }
@@ -157,14 +162,16 @@ fun NativeAdItem(
 
                 Spacer(modifier = Modifier.height(dimens.space6))
 
-                NativeAdMediaView(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(NATIVE_MEDIA_HEIGHT),
-                    scaleType = ImageView.ScaleType.CENTER_CROP,
-                )
+                if (!isSmallFormat) {
+                    NativeAdMediaView(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(NATIVE_MEDIA_HEIGHT),
+                        scaleType = ImageView.ScaleType.CENTER_CROP,
+                    )
 
-                Spacer(modifier = Modifier.height(dimens.space6))
+                    Spacer(modifier = Modifier.height(dimens.space6))
+                }
 
                 nativeAd.body?.let { body ->
                     NativeAdBodyView(modifier = Modifier.padding(horizontal = dimens.space12).padding(bottom = dimens.space6)) {
