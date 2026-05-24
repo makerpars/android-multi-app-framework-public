@@ -1,0 +1,17 @@
+name = "contentapp-ssv-callback"
+main = "src/index.ts"
+compatibility_date = "2026-05-24"
+workers_dev = true
+
+# After deploying, register the worker URL in AdMob console:
+#   AdMob > Apps > [App] > Ad units > Rewarded (or Rewarded Interstitial)
+#   > Server-side verification > Server URL
+# URL format: https://contentapp-ssv-callback.<your-subdomain>.workers.dev/ssv
+
+# KV namespace for transaction dedup (prevents double-grant on AdMob retry).
+# Create with: npx wrangler kv:namespace create SSV_DEDUP
+# Then replace the placeholder IDs below.
+[[kv_namespaces]]
+binding = "SSV_DEDUP"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+preview_id = "REPLACE_WITH_KV_PREVIEW_NAMESPACE_ID"
