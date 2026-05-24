@@ -11,6 +11,33 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+buildscript {
+    configurations.all {
+        resolutionStrategy {
+            // Force secure versions for Netty (HTTP/2 DoS, Request Smuggling, etc.)
+            val nettyVersion = "4.1.118.Final"
+            force("io.netty:netty-codec-http2:$nettyVersion")
+            force("io.netty:netty-handler:$nettyVersion")
+            force("io.netty:netty-codec-http:$nettyVersion")
+            force("io.netty:netty-codec:$nettyVersion")
+            force("io.netty:netty-common:$nettyVersion")
+            force("io.netty:netty-handler-proxy:$nettyVersion")
+            
+            // Force secure BouncyCastle, Guava, and other transitive build plugin deps
+            force("org.bouncycastle:bcprov-jdk18on:1.79")
+            force("org.bouncycastle:bcpkix-jdk18on:1.79")
+            force("com.google.guava:guava:33.4.0-jre")
+            force("org.jdom:jdom2:2.0.6.1")
+            force("org.bitbucket.b_c:jose4j:0.9.6")
+            force("org.apache.commons:commons-lang3:3.17.0")
+            force("ch.qos.logback:logback-core:1.5.16")
+            force("org.apache.httpcomponents:httpclient:4.5.14")
+        }
+    }
+}
+
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
