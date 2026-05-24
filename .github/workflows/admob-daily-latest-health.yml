@@ -70,6 +70,7 @@ jobs:
             --versions-file "app-versions.properties" \
             --ignore-app-label "Son Depremler" \
             --ignore-app-label "Astroloji: Günlük Burç Yorumu" \
+            --ignore-app-label "İmsakiye" \
             --top 20 \
             --min-requests 50 \
             --show-rate-threshold 0.20 \
