@@ -9,9 +9,7 @@ workers_dev = true
 # URL format: https://contentapp-ssv-callback.<your-subdomain>.workers.dev/ssv
 
 # KV namespace for transaction dedup (prevents double-grant on AdMob retry).
-# Create with: npx wrangler kv:namespace create SSV_DEDUP
-# Then replace the placeholder IDs below.
 [[kv_namespaces]]
 binding = "SSV_DEDUP"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
-preview_id = "REPLACE_WITH_KV_PREVIEW_NAMESPACE_ID"
+id = "2befe98d30cc40d094d9edba779d2bd9"
+preview_id = "1ab681a2008f4d11ae9d612795bc6635"
